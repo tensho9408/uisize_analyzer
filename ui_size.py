@@ -10,6 +10,9 @@ import matplotlib.font_manager as fm
 #print(current_dir)
 # フォントの相対パスを指定（スクリプトと同じディレクトリに「font」フォルダを作成し、その中にフォントを配置）
 #font_path = os.path.join(current_dir, "font", "SimHei.ttf")
+from matplotlib import rc
+rc('font', family='SimHei')  # 将字体名称指定为 SimHei
+
 
 font_path = "./data/SimHei.ttf"
 font_prop = fm.FontProperties(fname=font_path)
@@ -19,7 +22,7 @@ font_prop = fm.FontProperties(fname=font_path)
 # SimHei フォントをシステムインストール済みフォントで指定
 # matplotlib.rc("font", family="SimHei")
 # グローバルにフォントを設定
-plt.rcParams["font.family"] = font_prop.get_name()
+# plt.rcParams["font.family"] = font_prop.get_name()
 plt.rcParams["axes.unicode_minus"] = False
 
 
