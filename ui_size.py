@@ -142,15 +142,10 @@ if user_input:
 
         # 箱线图
         st.write("### 各项目的大小分布（箱线图）")
-        fig, ax = plt.subplots(figsize=(15, 8))  # 図のサイズを拡大
-        sns.boxplot(data=df_modules, x="项目名", y="大小 (MB)", ax=ax,
-                    palette="Set3")
-
-        # ラベルとタイトルの設定
-        ax.set_xticklabels(ax.get_xticklabels(), fontproperties=font_prop,
-                           rotation=45)  # ラベルを回転
-        ax.set_title("各项目大小分布", fontproperties=font_prop)
-
+        fig, ax = plt.subplots(figsize=(12, 6))
+        sns.boxplot(data=df_modules, x="项目名", y="大小 (MB)", ax=ax, palette="Set3", fontproperties=font_prop)
+        plt.xticks(rotation=45, fontproperties=font_prop)
+        plt.title("各项目大小分布", fontproperties=font_prop)
         st.pyplot(fig)
 
         # 累积分布函数（CDF）
