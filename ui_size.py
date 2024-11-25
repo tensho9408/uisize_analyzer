@@ -15,7 +15,9 @@ font_path = "./data/SimHei.ttf"
 font_prop = fm.FontProperties(fname=font_path)
 
 # Matplotlibの設定に適用
-matplotlib.rc("font", family=font_prop.get_name())
+# matplotlib.rc("font", family=font_prop.get_name())
+# SimHei フォントをシステムインストール済みフォントで指定
+matplotlib.rc("font", family="SimHei")
 plt.rcParams["axes.unicode_minus"] = False
 
 
@@ -172,7 +174,9 @@ if user_input:
             )
             fig, ax = plt.subplots(figsize=(10, 8))
             sns.heatmap(pivot_table, cmap="YlGnBu", annot=True, fmt=".2f", linewidths=0.5, ax=ax)
-            plt.title("模块大小热图")
+            plt.title("模块大小热图", fontproperties=font_prop)
+            plt.xticks(fontproperties=font_prop)
+            plt.yticks(fontproperties=font_prop)
             st.pyplot(fig)
         except Exception as e:
             st.error(f"热图生成时发生错误: {e}")
