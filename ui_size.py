@@ -143,7 +143,7 @@ if user_input:
         # 箱线图
         st.write("### 各项目的大小分布（箱线图）")
         fig, ax = plt.subplots(figsize=(12, 6))
-        sns.boxplot(data=df_modules, x="Project", y="Size (MB)", ax=ax, palette="Set3")
+        sns.boxplot(data=df_modules, x="项目名", y="大小 (MB)", ax=ax, palette="Set3")
         plt.xticks(rotation=45, fontproperties=font_prop)
         plt.title("各项目大小分布", fontproperties=font_prop)
         st.pyplot(fig)
