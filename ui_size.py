@@ -139,9 +139,9 @@ if user_input:
         # 箱线图
         st.write("### 各项目的大小分布（箱线图）")
         fig, ax = plt.subplots(figsize=(12, 6))
-        sns.boxplot(data=df_modules, x="项目名", y="大小 (MB)", ax=ax, palette="Set3")
+        sns.boxplot(data=df_modules, x="项目名", y="大小 (MB)", ax=ax, palette="Set3", )
         plt.xticks(rotation=45)
-        plt.title("各项目大小分布")
+        plt.title("各项目大小分布", fontproperties=font_prop)
         st.pyplot(fig)
 
         # 累积分布函数（CDF）
@@ -150,9 +150,9 @@ if user_input:
         cdf = np.arange(1, len(sorted_sizes) + 1) / len(sorted_sizes)
         fig, ax = plt.subplots(figsize=(10, 6))
         ax.plot(sorted_sizes, cdf, marker=".", linestyle="none", color="orange")
-        plt.xlabel("模块大小 (MB)")
-        plt.ylabel("累积比例")
-        plt.title("累积分布函数（CDF）")
+        plt.xlabel("模块大小 (MB)", fontproperties=font_prop)
+        plt.ylabel("累积比例", fontproperties=font_prop)
+        plt.title("累积分布函数（CDF）", fontproperties=font_prop)
         st.pyplot(fig)
 
         # 顶级模块排名
