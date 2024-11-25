@@ -8,7 +8,8 @@ import os
 
 import matplotlib.font_manager as fm
 
-#current_dir = os.path.dirname(os.path.abspath(__file__))
+current_dir = os.path.dirname(os.path.abspath(__file__))
+print(current_dir)
 # フォントの相対パスを指定（スクリプトと同じディレクトリに「font」フォルダを作成し、その中にフォントを配置）
 #font_path = os.path.join(current_dir, "font", "SimHei.ttf")
 
