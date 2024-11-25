@@ -146,6 +146,8 @@ if user_input:
         sns.boxplot(data=df_modules, x="项目名", y="大小 (MB)", ax=ax, palette="Set3", )
         plt.xticks(rotation=45, fontproperties=font_prop)
         plt.title("各项目大小分布", fontproperties=font_prop)
+        plt.xlabel("项目名", fontproperties=font_prop)
+        plt.ylabel("大小 (MB)", fontproperties=font_prop)
         st.pyplot(fig)
 
         # 累积分布函数（CDF）
@@ -154,9 +156,9 @@ if user_input:
         cdf = np.arange(1, len(sorted_sizes) + 1) / len(sorted_sizes)
         fig, ax = plt.subplots(figsize=(10, 6))
         ax.plot(sorted_sizes, cdf, marker=".", linestyle="none", color="orange")
+        plt.title("累积分布函数（CDF）", fontproperties=font_prop)
         plt.xlabel("模块大小 (MB)", fontproperties=font_prop)
         plt.ylabel("累积比例", fontproperties=font_prop)
-        plt.title("累积分布函数（CDF）", fontproperties=font_prop)
         st.pyplot(fig)
 
         # 顶级模块排名
@@ -180,6 +182,8 @@ if user_input:
 
             # タイトルとラベル設定
             ax.set_title("模块大小热图", fontproperties=font_prop, fontsize=16)
+            plt.xlabel("项目", fontproperties=font_prop)
+            plt.ylabel("模块", fontproperties=font_prop)
             ax.set_xticklabels(ax.get_xticklabels(), fontproperties=font_prop,
                                rotation=45, fontsize=8)
             ax.set_yticklabels(ax.get_yticklabels(), fontproperties=font_prop,
