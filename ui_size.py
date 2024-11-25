@@ -17,7 +17,7 @@ else:
     font_prop = fm.FontProperties(fname=font_path)
     rc('font', family=font_prop.get_name())
     # plt.rcParams["font.family"] = "sans-serif"  # 使用系统默认字体
-    plt.rcParams["font.family"] = "DejaVu Sans"
+    # plt.rcParams["font.family"] = "DejaVu Sans"
     plt.rcParams["axes.unicode_minus"] = False
 
 
@@ -144,7 +144,7 @@ if user_input:
         st.write("### 各项目的大小分布（箱线图）")
         fig, ax = plt.subplots(figsize=(12, 6))
         sns.boxplot(data=df_modules, x="项目名", y="大小 (MB)", ax=ax, palette="Set3", )
-        plt.xticks(rotation=45)
+        plt.xticks(rotation=45, fontproperties=font_prop)
         plt.title("各项目大小分布", fontproperties=font_prop)
         st.pyplot(fig)
 
@@ -186,27 +186,43 @@ if user_input:
         # 总体饼图
         st.write("### 数据比例（按项目）")
         try:
+            # プロジェクトデータの集計
             project_sizes = pd.DataFrame({
                 "项目名": [p["项目名"] for p in projects],
                 "大小 (MB)": [p["总数据量 (MB)"] for p in projects]
             })
 
-            project_sizes, other_details = group_small_data(project_sizes, threshold=5)
+            # 小さいデータを「其他」にまとめる
+            project_sizes, other_details = group_small_data(project_sizes,
+                                                            threshold=5)
 
             fig, ax = plt.subplots(figsize=(10, 10))
             wedges, texts, autotexts = ax.pie(
                 project_sizes["大小 (MB)"],
                 labels=project_sizes["项目名"],
-                autopct="%1.1f%%",
+                autopct=lambda p: f"{p:.1f}%" if p > 0 else "",
                 startangle=90,
                 colors=sns.color_palette("Set2", len(project_sizes)),
-                wedgeprops={"edgecolor": "black", "linewidth": 0.5},
+                wedgeprops={"edgecolor": "black", "linewidth": 0.5}
             )
 
-            plt.title("各项目的数据比例", fontsize=16)
+            # フォントプロパティを適用
+            for text in texts:
+                text.set_fontproperties(font_prop)
+            for autotext in autotexts:
+                autotext.set_fontproperties(font_prop)
+
+            # タイトルにフォントプロパティを適用
+            plt.title("各项目的数据比例", fontsize=16, fontproperties=font_prop)
+
+            # "其他"の内容を表示
+            if other_details:
+                st.info(f"“其他”中包含的项目：{other_details}")
+
             st.pyplot(fig)
         except Exception as e:
             st.error(f"饼图生成时发生错误: {e}")
+
 
 else:
     st.info("请输入数据。")
