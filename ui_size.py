@@ -16,7 +16,8 @@ if not os.path.exists(font_path):
 else:
     font_prop = fm.FontProperties(fname=font_path)
     rc('font', family=font_prop.get_name())
-    plt.rcParams["font.family"] = "sans-serif"  # 使用系统默认字体
+    # plt.rcParams["font.family"] = "sans-serif"  # 使用系统默认字体
+    plt.rcParams["font.family"] = "DejaVu Sans"
     plt.rcParams["axes.unicode_minus"] = False
 
 
@@ -77,6 +78,7 @@ def parse_input_data(input_text):
 
     return projects
 
+
 # 小数据合并为“其他”函数
 def group_small_data(data, threshold=5):
     total_size = data["大小 (MB)"].sum()
@@ -93,6 +95,7 @@ def group_small_data(data, threshold=5):
         grouped_data = pd.concat([grouped_data, other_row], ignore_index=True)
 
     return grouped_data, other_details
+
 
 # 数据解析与可视化
 if user_input:
