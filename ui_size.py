@@ -5,25 +5,18 @@ import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
 import matplotlib.font_manager as fm
-
-#current_dir = os.path.dirname(os.path.abspath(__file__))
-#print(current_dir)
-# フォントの相対パスを指定（スクリプトと同じディレクトリに「font」フォルダを作成し、その中にフォントを配置）
-#font_path = os.path.join(current_dir, "font", "SimHei.ttf")
+import os
 from matplotlib import rc
-rc('font', family='SimHei')  # 将字体名称指定为 SimHei
 
 
+# 检查字体路径
 font_path = "./data/SimHei.ttf"
-font_prop = fm.FontProperties(fname=font_path)
-
-# Matplotlibの設定に適用
-# matplotlib.rc("font", family=font_prop.get_name())
-# SimHei フォントをシステムインストール済みフォントで指定
-# matplotlib.rc("font", family="SimHei")
-# グローバルにフォントを設定
-# plt.rcParams["font.family"] = font_prop.get_name()
-plt.rcParams["axes.unicode_minus"] = False
+if not os.path.exists(font_path):
+    st.error("字体文件未找到！请检查路径是否正确。")
+else:
+    font_prop = fm.FontProperties(fname=font_path)
+    rc('font', family=font_prop.get_name())
+    plt.rcParams["axes.unicode_minus"] = False
 
 
 # 标题
