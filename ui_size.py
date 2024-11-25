@@ -16,6 +16,7 @@ if not os.path.exists(font_path):
 else:
     font_prop = fm.FontProperties(fname=font_path)
     rc('font', family=font_prop.get_name())
+    plt.rcParams["font.family"] = "sans-serif"  # 使用系统默认字体
     plt.rcParams["axes.unicode_minus"] = False
 
 
