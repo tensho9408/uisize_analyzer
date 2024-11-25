@@ -129,10 +129,11 @@ if user_input:
         y = np.full(len(df_modules["大小 (MB)"]), -0.02)
         ax.scatter(df_modules["大小 (MB)"], y, color="green", alpha=0.6, label="数据点", s=15)
 
-        plt.xlabel("模块大小 (MB)")
-        plt.ylabel("密度")
-        plt.title("模块大小分布与正态分布对比")
-        plt.legend()
+        plt.xlabel("模块大小 (MB)", fontproperties=font_prop)
+        plt.ylabel("密度", fontproperties=font_prop)
+        plt.title("模块大小分布与正态分布对比", fontproperties=font_prop)
+        plt.legend(prop=font_prop)
+
         st.pyplot(fig)
 
         # 箱线图
