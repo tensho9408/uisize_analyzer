@@ -7,33 +7,33 @@ import numpy as np
 from scipy.stats import norm, chisquare
 from adjustText import adjust_text
 
-# Matplotlibフォント設定（日本語対応）
+# Matplotlib字体设置（支持中文）
 matplotlib.rc("font", family="SimHei")
 plt.rcParams["axes.unicode_minus"] = False
 
-# タイトル
-st.title("プロジェクトモジュールデータ分析ツール")
+# 标题
+st.title("项目模块数据分析工具")
 
-# データ入力フォーマットの説明
-st.write("以下のフォーマットでデータを入力してください：")
+# 数据输入格式说明
+st.write("请按照以下格式输入数据：")
 st.code(
     """
-プロジェクト名 size = 総データ量
-モジュール名1 size = サイズ1
-モジュール名2 size = サイズ2
+项目名 size = 总数据量
+模块名1 size = 大小1
+模块名2 size = 大小2
 ...
 -------------------
-別のプロジェクト名 size = 総データ量
-モジュール名A size = サイズA
-モジュール名B size = サイズB
+另一个项目名 size = 总数据量
+模块名A size = 大小A
+模块名B size = 大小B
 ...
     """
 )
 
-# ユーザー入力
-user_input = st.text_area("ここにデータを入力してください:", height=400)
+# 用户输入
+user_input = st.text_area("请在此输入数据：", height=400)
 
-# 入力データ解析関数
+# 输入数据解析函数
 def parse_input_data(input_text):
     projects = []
     current_project = None
@@ -50,11 +50,11 @@ def parse_input_data(input_text):
                 size = float(size.strip())
 
                 if current_project is None:
-                    current_project = {"プロジェクト名": name, "総データ量 (MB)": size, "モジュール": []}
+                    current_project = {"项目名": name, "总数据量 (MB)": size, "模块": []}
                 else:
-                    current_project["モジュール"].append({"モジュール名": name, "サイズ (MB)": size})
+                    current_project["模块"].append({"模块名": name, "大小 (MB)": size})
             except ValueError:
-                st.error("無効なデータ形式があります。フォーマットを確認してください。")
+                st.error("数据格式无效，请检查格式。")
                 return []
 
         elif "-------------------" in line:
@@ -67,130 +67,130 @@ def parse_input_data(input_text):
 
     return projects
 
-# 小さいデータを「その他」にまとめる関数
+# 小数据合并为“其他”函数
 def group_small_data(data, threshold=5):
-    total_size = data["サイズ (MB)"].sum()
-    grouped_data = data[data["サイズ (MB)"] >= (total_size * threshold / 100)]
-    small_data = data[data["サイズ (MB)"] < (total_size * threshold / 100)]
+    total_size = data["大小 (MB)"].sum()
+    grouped_data = data[data["大小 (MB)"] >= (total_size * threshold / 100)]
+    small_data = data[data["大小 (MB)"] < (total_size * threshold / 100)]
 
     other_details = ""
     if not small_data.empty:
-        other_details = ", ".join(small_data["プロジェクト名"])
+        other_details = ", ".join(small_data["项目名"])
         other_row = pd.DataFrame({
-            "プロジェクト名": ["その他"],
-            "サイズ (MB)": [small_data["サイズ (MB)"].sum()]
+            "项目名": ["其他"],
+            "大小 (MB)": [small_data["大小 (MB)"].sum()]
         })
         grouped_data = pd.concat([grouped_data, other_row], ignore_index=True)
 
     return grouped_data, other_details
 
-# データ解析と描画
+# 数据解析与可视化
 if user_input:
     projects = parse_input_data(user_input)
 
     if projects:
-        st.write("## データ概要")
-        all_modules = [{"プロジェクト名": p["プロジェクト名"], "モジュール名": m["モジュール名"], "サイズ (MB)": m["サイズ (MB)"]}
-                       for p in projects for m in p["モジュール"]]
+        st.write("## 数据概览")
+        all_modules = [{"项目名": p["项目名"], "模块名": m["模块名"], "大小 (MB)": m["大小 (MB)"]}
+                       for p in projects for m in p["模块"]]
         df_modules = pd.DataFrame(all_modules)
 
-        # 元のデータを表示
-        st.write("### 元のデータ")
+        # 显示原始数据
+        st.write("### 原始数据")
         st.dataframe(df_modules)
 
-        # 統計情報
-        st.write("### データの統計情報")
-        st.write(f"平均: {df_modules['サイズ (MB)'].mean():.2f} MB")
-        st.write(f"中央値: {df_modules['サイズ (MB)'].median():.2f} MB")
-        st.write(f"最頻値: {df_modules['サイズ (MB)'].mode()[0]:.2f} MB")
-        st.write(f"標準偏差: {df_modules['サイズ (MB)'].std():.2f} MB")
-        st.write(f"最大値: {df_modules['サイズ (MB)'].max():.2f} MB")
-        st.write(f"最小値: {df_modules['サイズ (MB)'].min():.2f} MB")
+        # 统计信息
+        st.write("### 数据统计信息")
+        st.write(f"平均值: {df_modules['大小 (MB)'].mean():.2f} MB")
+        st.write(f"中位数: {df_modules['大小 (MB)'].median():.2f} MB")
+        st.write(f"众数: {df_modules['大小 (MB)'].mode()[0]:.2f} MB")
+        st.write(f"标准差: {df_modules['大小 (MB)'].std():.2f} MB")
+        st.write(f"最大值: {df_modules['大小 (MB)'].max():.2f} MB")
+        st.write(f"最小值: {df_modules['大小 (MB)'].min():.2f} MB")
 
-        # ヒストグラム + 正規分布 + 実際の分布
-        st.write("### モジュールデータサイズの分布（ヒストグラム + 正規分布 + 実際の分布）")
+        # 直方图 + 正态分布 + 实际分布
+        st.write("### 模块数据大小的分布（直方图 + 正态分布 + 实际分布）")
         fig, ax = plt.subplots(figsize=(10, 5))
-        sns.histplot(df_modules["サイズ (MB)"], bins=20, kde=False, color="blue", stat="density", ax=ax, label="データ分布")
-        mean = df_modules["サイズ (MB)"].mean()
-        std_dev = df_modules["サイズ (MB)"].std()
-        x = np.linspace(df_modules["サイズ (MB)"].min(), df_modules["サイズ (MB)"].max(), 100)
+        sns.histplot(df_modules["大小 (MB)"], bins=20, kde=False, color="blue", stat="density", ax=ax, label="数据分布")
+        mean = df_modules["大小 (MB)"].mean()
+        std_dev = df_modules["大小 (MB)"].std()
+        x = np.linspace(df_modules["大小 (MB)"].min(), df_modules["大小 (MB)"].max(), 100)
         normal_dist = (1 / (std_dev * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x - mean) / std_dev) ** 2)
-        ax.plot(x, normal_dist, color="red", label="正規分布")
-        sns.kdeplot(df_modules["サイズ (MB)"], color="purple", linewidth=2, label="カーネル密度推定", ax=ax)
-        y = np.full(len(df_modules["サイズ (MB)"]), -0.02)
-        ax.scatter(df_modules["サイズ (MB)"], y, color="green", alpha=0.6, label="データ点", s=15)
+        ax.plot(x, normal_dist, color="red", label="正态分布")
+        sns.kdeplot(df_modules["大小 (MB)"], color="purple", linewidth=2, label="核密度估计", ax=ax)
+        y = np.full(len(df_modules["大小 (MB)"]), -0.02)
+        ax.scatter(df_modules["大小 (MB)"], y, color="green", alpha=0.6, label="数据点", s=15)
 
-        plt.xlabel("モジュールサイズ (MB)")
+        plt.xlabel("模块大小 (MB)")
         plt.ylabel("密度")
-        plt.title("モジュールサイズの分布と正規分布")
+        plt.title("模块大小分布与正态分布对比")
         plt.legend()
         st.pyplot(fig)
 
-        # 箱ひげ図
-        st.write("### プロジェクトごとのサイズ分布（箱ひげ図）")
+        # 箱线图
+        st.write("### 各项目的大小分布（箱线图）")
         fig, ax = plt.subplots(figsize=(12, 6))
-        sns.boxplot(data=df_modules, x="プロジェクト名", y="サイズ (MB)", ax=ax, palette="Set3")
+        sns.boxplot(data=df_modules, x="项目名", y="大小 (MB)", ax=ax, palette="Set3")
         plt.xticks(rotation=45)
-        plt.title("プロジェクトごとのサイズ分布")
+        plt.title("各项目大小分布")
         st.pyplot(fig)
 
-        # 累積分布関数（CDF）
-        st.write("### 累積分布関数（CDF）")
-        sorted_sizes = np.sort(df_modules["サイズ (MB)"])
+        # 累积分布函数（CDF）
+        st.write("### 累积分布函数（CDF）")
+        sorted_sizes = np.sort(df_modules["大小 (MB)"])
         cdf = np.arange(1, len(sorted_sizes) + 1) / len(sorted_sizes)
         fig, ax = plt.subplots(figsize=(10, 6))
         ax.plot(sorted_sizes, cdf, marker=".", linestyle="none", color="orange")
-        plt.xlabel("モジュールサイズ (MB)")
-        plt.ylabel("累積割合")
-        plt.title("累積分布関数（CDF）")
+        plt.xlabel("模块大小 (MB)")
+        plt.ylabel("累积比例")
+        plt.title("累积分布函数（CDF）")
         st.pyplot(fig)
 
-        # トップモジュールランキング
-        st.write("### トップモジュールランキング")
-        top_modules = df_modules.nlargest(5, "サイズ (MB)")
-        st.write("上位 5 モジュール:")
+        # 顶级模块排名
+        st.write("### 顶级模块排名")
+        top_modules = df_modules.nlargest(5, "大小 (MB)")
+        st.write("前 5 个模块：")
         st.table(top_modules)
 
-        # プロジェクトごとのモジュールサイズヒートマップ
-        st.write("### プロジェクトごとのモジュールサイズヒートマップ")
+        # 各项目的模块大小热图
+        st.write("### 各项目的模块大小热图")
         try:
             pivot_table = df_modules.pivot_table(
-                index="モジュール名",
-                columns="プロジェクト名",
-                values="サイズ (MB)",
+                index="模块名",
+                columns="项目名",
+                values="大小 (MB)",
                 fill_value=0
             )
             fig, ax = plt.subplots(figsize=(10, 8))
             sns.heatmap(pivot_table, cmap="YlGnBu", annot=True, fmt=".2f", linewidths=0.5, ax=ax)
-            plt.title("モジュールサイズヒートマップ")
+            plt.title("模块大小热图")
             st.pyplot(fig)
         except Exception as e:
-            st.error(f"ヒートマップ生成時にエラーが発生しました: {e}")
+            st.error(f"热图生成时发生错误: {e}")
 
-        # 総括円グラフ
-        st.write("### データ比率 (プロジェクトごと)")
+        # 总体饼图
+        st.write("### 数据比例（按项目）")
         try:
             project_sizes = pd.DataFrame({
-                "プロジェクト名": [p["プロジェクト名"] for p in projects],
-                "サイズ (MB)": [p["総データ量 (MB)"] for p in projects]
+                "项目名": [p["项目名"] for p in projects],
+                "大小 (MB)": [p["总数据量 (MB)"] for p in projects]
             })
 
             project_sizes, other_details = group_small_data(project_sizes, threshold=5)
 
             fig, ax = plt.subplots(figsize=(10, 10))
             wedges, texts, autotexts = ax.pie(
-                project_sizes["サイズ (MB)"],
-                labels=project_sizes["プロジェクト名"],
+                project_sizes["大小 (MB)"],
+                labels=project_sizes["项目名"],
                 autopct="%1.1f%%",
                 startangle=90,
                 colors=sns.color_palette("Set2", len(project_sizes)),
                 wedgeprops={"edgecolor": "black", "linewidth": 0.5},
             )
 
-            plt.title("プロジェクトごとのデータ比率", fontsize=16)
+            plt.title("各项目的数据比例", fontsize=16)
             st.pyplot(fig)
         except Exception as e:
-            st.error(f"総括円グラフ生成時にエラーが発生しました: {e}")
+            st.error(f"饼图生成时发生错误: {e}")
 
 else:
-    st.info("データを入力してください。")
+    st.info("请输入数据。")
