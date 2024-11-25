@@ -17,7 +17,9 @@ font_prop = fm.FontProperties(fname=font_path)
 # Matplotlibの設定に適用
 # matplotlib.rc("font", family=font_prop.get_name())
 # SimHei フォントをシステムインストール済みフォントで指定
-matplotlib.rc("font", family="SimHei")
+# matplotlib.rc("font", family="SimHei")
+# グローバルにフォントを設定
+plt.rcParams["font.family"] = font_prop.get_name()
 plt.rcParams["axes.unicode_minus"] = False
 
 
