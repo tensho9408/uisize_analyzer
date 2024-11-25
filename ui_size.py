@@ -142,10 +142,15 @@ if user_input:
 
         # 箱线图
         st.write("### 各项目的大小分布（箱线图）")
-        fig, ax = plt.subplots(figsize=(12, 6))
-        sns.boxplot(data=df_modules, x="项目名", y="大小 (MB)", ax=ax, palette="Set3", )
-        plt.xticks(rotation=45, fontproperties=font_prop)
-        plt.title("各项目大小分布", fontproperties=font_prop)
+        fig, ax = plt.subplots(figsize=(15, 8))  # 図のサイズを拡大
+        sns.boxplot(data=df_modules, x="项目名", y="大小 (MB)", ax=ax,
+                    palette="Set3")
+
+        # ラベルとタイトルの設定
+        ax.set_xticklabels(ax.get_xticklabels(), fontproperties=font_prop,
+                           rotation=45)  # ラベルを回転
+        ax.set_title("各项目大小分布", fontproperties=font_prop)
+
         st.pyplot(fig)
 
         # 累积分布函数（CDF）
@@ -174,11 +179,17 @@ if user_input:
                 values="大小 (MB)",
                 fill_value=0
             )
-            fig, ax = plt.subplots(figsize=(10, 8))
-            sns.heatmap(pivot_table, cmap="YlGnBu", annot=True, fmt=".2f", linewidths=0.5, ax=ax)
-            plt.title("模块大小热图", fontproperties=font_prop)
-            plt.xticks(fontproperties=font_prop)
-            plt.yticks(fontproperties=font_prop)
+            fig, ax = plt.subplots(figsize=(15, 12))  # サイズを拡大
+            sns.heatmap(pivot_table, cmap="YlGnBu", annot=True, fmt=".2f",
+                        linewidths=0.5, ax=ax)
+
+            # タイトルとラベル設定
+            ax.set_title("模块大小热图", fontproperties=font_prop, fontsize=16)
+            ax.set_xticklabels(ax.get_xticklabels(), fontproperties=font_prop,
+                               rotation=45, fontsize=8)
+            ax.set_yticklabels(ax.get_yticklabels(), fontproperties=font_prop,
+                               fontsize=8)
+
             st.pyplot(fig)
         except Exception as e:
             st.error(f"热图生成时发生错误: {e}")
