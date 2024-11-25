@@ -13,7 +13,7 @@ print(current_dir)
 # フォントの相対パスを指定（スクリプトと同じディレクトリに「font」フォルダを作成し、その中にフォントを配置）
 #font_path = os.path.join(current_dir, "font", "SimHei.ttf")
 
-font_path = r"./data/SimHei.ttf"
+font_path = r".SimHei.ttf"
 font_prop = fm.FontProperties(fname=font_path)
 
 # Matplotlibの設定に適用
