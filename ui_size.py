@@ -4,11 +4,19 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
-from scipy.stats import norm, chisquare
-from adjustText import adjust_text
+import os
 
-# Matplotlib字体设置（支持中文）
-matplotlib.rc("font", family="SimHei")
+import matplotlib.font_manager as fm
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# フォントの相対パスを指定（スクリプトと同じディレクトリに「font」フォルダを作成し、その中にフォントを配置）
+font_path = os.path.join(current_dir, "font", "SimHei.ttf")
+
+
+font_prop = fm.FontProperties(fname=font_path)
+
+# Matplotlibの設定に適用
+matplotlib.rc("font", family=font_prop.get_name())
 plt.rcParams["axes.unicode_minus"] = False
 
 # 标题
